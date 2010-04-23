@@ -138,15 +138,10 @@ class Uboat():
       ]
 
 
-  def death_message(self):
-    """Returns a u-boat-death message.
-
-    Returns a u-boat-death message patterned after messages in Iron
-    Coffins."""
+  def _parse_template(self, template):
     message = []
-    template = random.choice(self._uboat_message)
+    tail = ''
     for element in template:
-      tail = ''
       if element[0] is '*':
         if element[-1] is '.':
           ary = '_uboat_' + element[1:-1]
@@ -167,9 +162,17 @@ class Uboat():
           message.append(' '.join(submsg) + tail)
         else:
           message.append(chosen + tail)
-
       else:
         message.append(element)
+    return message
+
+  def death_message(self):
+    """Returns a u-boat-death message.
+
+    Returns a u-boat-death message patterned after messages in Iron
+    Coffins."""
+    template = random.choice(self._uboat_message)
+    message = self._parse_template(template)
     message.append('U-' + str(random.randint(100, 999)) + '.')
     return ' '.join(message)
 
