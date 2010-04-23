@@ -38,6 +38,11 @@ class Uboat():
       ['*verb', 'BY', '*device.', '*dropdevices.', '*sinkage.'],
       ]
 
+    self._uboat_engage = [
+      'VALIUM NOZZLE',
+      'PLOT DEVICE',
+      ]
+
     self._uboat_sinkage = [
       'SINKING',
       'SINKING',
@@ -45,11 +50,8 @@ class Uboat():
       'SINKING',
       'SINKING',
       'SINKING',
-      [ ['ENGAGING', '*noun'],
-        'VALIUM NOZZLE',
-        'PLOT DEVICE',
-        'EXPLODING',
-        ],
+      ['ENGAGING', '*engage'],
+      'EXPLODING',
       'LEAVE BOAT',
       ]
 
@@ -60,16 +62,19 @@ class Uboat():
       'ANNOYED',
       ]
 
+    self._uboat_size = [
+      'TINY',
+      'SMALL',
+      'ENORMOUS',
+      ]
+
     self._uboat_device = [
       'AIRCRAFT',
       'CORVETTE',
       'ATOMIC BOMB',
       'DESTROYER',
       'SALESMEN',
-      [ ['*adjective', 'GNATS'],
-        'TINY',
-        'SMALL',
-        'ENORMOUS'],
+      ['*size', 'GNATS'],
       'IRC SERVER',
       'NETSCAPE',
       'SPACE_TIME VORTEX',
@@ -109,12 +114,15 @@ class Uboat():
       'CRASHING WEB BROWSERS',
       ]
 
+    self._uboat_action = [
+      'DIVE',
+      'SURFACE',
+      'STAY AFLOAT',
+      'USE RADIO',
+      ]
+
     self._uboat_condition = [
-      [ ['UNABLE TO', '*verb'],
-        'DIVE',
-        'SURFACE',
-        'STAY AFLOAT',
-        'USE RADIO'],
+      ['UNABLE TO', '*action'],
       'CREW UNMOTIVATED',
       'CAPTAIN INTOXICATED',
       ]
@@ -148,13 +156,11 @@ class Uboat():
         chosen = random.choice(getattr(self, ary))
 
         if type(chosen) is type([]):
-          # sub lists have their template as the 1st item in the list.
-          sub_temp = list(chosen[0])
-          del chosen[0]
           submsg = []
-          for subitem in sub_temp:
+          for subitem in chosen:
             if subitem[0] is '*':
-              submsg.append(random.choice(chosen))
+              subary = '_uboat_' + subitem[1:]
+              submsg.append(random.choice(getattr(self, subary)))
             else:
               submsg.append(subitem)
           chosen = random.choice(chosen)
