@@ -22,8 +22,6 @@
 # Noah Friedman rewrote parts of the engine.
 # Brian W. Fitzpatrick rewrote it in Python
 
-# Code:
-
 import random
 
 class Uboat():
@@ -38,7 +36,7 @@ class Uboat():
       ['*verb', 'BY', '*device.', '*dropdevices.', '*sinkage.'],
       ]
 
-    self._uboat_engage = [
+    self._uboat_remedy = [
       'VALIUM NOZZLE',
       'PLOT DEVICE',
       ]
@@ -50,7 +48,7 @@ class Uboat():
       'SINKING',
       'SINKING',
       'SINKING',
-      ['ENGAGING', '*engage'],
+      ['ENGAGING', '*remedy'],
       'EXPLODING',
       'LEAVE BOAT',
       ]
@@ -62,7 +60,7 @@ class Uboat():
       'ANNOYED',
       ]
 
-    self._uboat_size = [
+    self._uboat_adjective = [
       'TINY',
       'SMALL',
       'ENORMOUS',
@@ -74,7 +72,7 @@ class Uboat():
       'ATOMIC BOMB',
       'DESTROYER',
       'SALESMEN',
-      ['*size', 'GNATS'],
+      ['*adjective', 'GNATS'],
       'IRC SERVER',
       'NETSCAPE',
       'SPACE_TIME VORTEX',
@@ -114,7 +112,7 @@ class Uboat():
       'CRASHING WEB BROWSERS',
       ]
 
-    self._uboat_action = [
+    self._uboat_unable_verb = [
       'DIVE',
       'SURFACE',
       'STAY AFLOAT',
@@ -122,7 +120,7 @@ class Uboat():
       ]
 
     self._uboat_condition = [
-      ['UNABLE TO', '*action'],
+      ['UNABLE TO', '*unable_verb'],
       'CREW UNMOTIVATED',
       'CAPTAIN INTOXICATED',
       ]
@@ -142,24 +140,16 @@ class Uboat():
     message = []
     tail = ''
     for element in template:
-      if element[0] is '*':
-        if element[-1] is '.':
+      if element[0] is '*': # Needs to be replaced
+        if element[-1] is '.': # maintain punctuation
           ary = '_uboat_' + element[1:-1]
-          tail = '.'
+          tail = element[-1]
         else:
           ary = '_uboat_' + element[1:]
-        chosen = random.choice(getattr(self, ary))
 
+        chosen = random.choice(getattr(self, ary))
         if type(chosen) is type([]):
-          submsg = []
-          for subitem in chosen:
-            if subitem[0] is '*':
-              subary = '_uboat_' + subitem[1:]
-              submsg.append(random.choice(getattr(self, subary)))
-            else:
-              submsg.append(subitem)
-          chosen = random.choice(chosen)
-          message.append(' '.join(submsg) + tail)
+          message.append(' '.join(self._parse_template(chosen)) + tail)
         else:
           message.append(chosen + tail)
       else:
