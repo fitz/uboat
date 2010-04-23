@@ -156,6 +156,7 @@ class Uboat():
         message.append(element)
     return message
 
+
   def death_message(self):
     """Returns a u-boat-death message.
 
