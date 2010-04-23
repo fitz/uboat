@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 #
 # uboat-tweet.py --- post uboat death messages to Twitter
 #
@@ -22,12 +22,14 @@
 from uboat import Uboat
 import twitter
 
+username = 'ironcoffins'
+password = ''
+
 if __name__ == '__main__':
 
   msg = Uboat().death_message()
-  print msg
-  api = twitter.Api(username='ironcoffins', password='password')
-  status = api.PostUpdate(username, password, msg)
+  api = twitter.Api(username, password)
+  status = api.PostUpdate(msg)
   print status.text
 
 
